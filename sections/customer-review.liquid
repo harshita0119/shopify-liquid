@@ -1,6 +1,131 @@
+{{ 'review.css' | asset_url | stylesheet_tag }}
+
+<div class="review-section-div">
+  <div class="review-section-wrapper">
+    <div class="swiper-container review-wrapper">
+      <div class="swiper-wrapper">
+        {% for block in section.blocks %}
+          {% if block.settings.image != blank %}
+            <div class="swiper-slide customer-review-wrapper">
+              <div class="customer-review">
+                <div class="profile">
+                  <div class="reviewer-img">
+                    <img
+                      src="{{ block.settings.image | img_url: '550x' }}"
+                      alt="{{ block.settings.image.alt }}"
+                      height="80px"
+                      width="80px"
+                      loading="lazy"
+                    >
+                  </div>
+                  <div class="reviewer-name-and-rating">
+                    <div class="reviewer-name">
+                      <span>{{ block.settings.reviewer_name }}</span>
+                    </div>
+                    <div class="ratings">
+                      <img
+                        src="https://cdn.shopify.com/s/files/1/0699/3782/4023/files/Stars_1420723a-978e-4dfd-a414-607283a24ecd.png?v=1709814747"
+                        alt="ratings"
+                        width="100px"
+                        height="14px"
+                        loading="lazy"
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div class="reivew-content">
+                  <p>{{ block.settings.review }}</p>
+                </div>
+                <div class="reviewer-name">
+                  <p>~ {{ block.settings.reviewer_name }}</p>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+
+      <!-- Add Pagination -->
+      <div class="swiper-pagination"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const swiper = new Swiper('.review-wrapper', {
+      slidesPerView: 3,
+      spaceBetween: 30,
+      loop: true,
+
+      // If we need pagination
+      pagination: {
+        el: '.swiper-pagination',
+        clickable: true,
+      },
+
+      breakpoints: {
+        // Responsive breakpoints
+        768: {
+          slidesPerView: 1,
+        }
+      },
+    });
+  });
+</script>
+
 {% schema %}
   {
-    "name": "Section name",
-    "settings": []
+    "name": "Review-Section",
+    "tag":"section",
+    "class":"review-section",
+    "settings": [
+      {
+        "type":"richtext",
+        "id":"title",
+        "label":"Reviews"
+}
+    ],
+    "blocks":[
+      {
+        "name":"Review",
+        "type":"review",
+        "settings":[
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "reviewer_image"
+        },
+          {
+       "type":"text",
+       "id":"reviewer_name",
+       "label":"reviewer_name",
+        "default":"enter name"
+        },
+        {
+      "type": "textarea",
+      "id": "review",
+      "label": "Review",
+       "default":"review"
+         },
+           {
+          "type": "image_picker",
+          "id": "ratings",
+          "label": "ratings_image"
+
+        }
+        ]
+      }
+    ],
+    "presets":[
+      {
+        "name":"Reviews",
+      "blocks": [
+        {
+          "type": "review"
+        }
+      ]
+      }
+    ]
   }
 {% endschema %}
